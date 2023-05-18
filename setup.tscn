@@ -1,0 +1,135 @@
+[gd_scene load_steps=7 format=3 uid="uid://conlf88pilm6f"]
+
+[ext_resource type="Script" path="res://setup.gd" id="1_2vyrb"]
+[ext_resource type="Theme" uid="uid://k4oolnpql0cw" path="res://Main.tres" id="1_30ukl"]
+[ext_resource type="Texture2D" uid="uid://71ltnevmrqsp" path="res://insideship.jpg" id="3_8iw53"]
+[ext_resource type="Texture2D" uid="uid://co3i515gibx8h" path="res://ColorLogotrans.png" id="4_dnj08"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_m1xvg"]
+font_size = 22
+
+[sub_resource type="LabelSettings" id="LabelSettings_546oi"]
+font_size = 40
+
+[node name="Setup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_30ukl")
+script = ExtResource("1_2vyrb")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_8iw53")
+expand_mode = 3
+
+[node name="DarkenBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.376471)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 423.0
+offset_bottom = -20.0
+grow_vertical = 2
+alignment = 1
+
+[node name="SCFolderLbl" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "StarCitizen_Launcher.exe Location:"
+label_settings = SubResource("LabelSettings_m1xvg")
+
+[node name="InstructionLbl" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Located inside your Star Citizen LIVE/PTU/EPTU folder."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="SCFolderLEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BrowseBtn" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Browse
+"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="SaveBtn" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save Settings"
+
+[node name="WarningLbl" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -300.0
+grow_horizontal = 0
+grow_vertical = 0
+metadata/_edit_group_ = true
+
+[node name="GravekeepersLogo" type="TextureRect" parent="VBoxContainer2"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+texture = ExtResource("4_dnj08")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(1280, 720)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("StarCitizen_Launcher.exe")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -339.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Initial Setup"
+label_settings = SubResource("LabelSettings_546oi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/BrowseBtn" to="." method="_on_browse_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/SaveBtn" to="." method="_on_save_btn_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

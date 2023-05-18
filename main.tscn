@@ -1,14 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://dv8la6hhklb8j"]
+[gd_scene load_steps=10 format=3 uid="uid://dv8la6hhklb8j"]
 
 [ext_resource type="Theme" uid="uid://k4oolnpql0cw" path="res://Main.tres" id="1_dvd8g"]
 [ext_resource type="Script" path="res://main.gd" id="1_f62fv"]
 [ext_resource type="Texture2D" uid="uid://71ltnevmrqsp" path="res://insideship.jpg" id="3_ikh6c"]
+[ext_resource type="Texture2D" uid="uid://co3i515gibx8h" path="res://ColorLogotrans.png" id="4_o35ih"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xombh"]
+font_size = 140
+font_color = Color(1, 1, 1, 0.392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3smfc"]
+font_size = 140
+font_color = Color(1, 1, 1, 0.392157)
 
 [sub_resource type="LabelSettings" id="LabelSettings_cltd5"]
 font_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hhtwc"]
 font_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_i1651"]
+font_size = 50
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -19,6 +31,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_dvd8g")
 script = ExtResource("1_f62fv")
+metadata/_edit_vertical_guides_ = [34.0]
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -49,6 +62,10 @@ offset_bottom = 30.0
 grow_horizontal = 2
 alignment = 2
 
+[node name="BackupControlsBtn" type="Button" parent="MenuBar"]
+layout_mode = 2
+text = "↓ Backup Controls ↓"
+
 [node name="RefreshBtn" type="Button" parent="MenuBar"]
 layout_mode = 2
 text = "Refresh Mappings"
@@ -58,51 +75,98 @@ custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 9
+[node name="ButtonsHBox" type="HBoxContainer" parent="."]
+layout_mode = 2
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 377.0
-offset_bottom = -20.0
-grow_vertical = 2
+offset_left = 36.0
+offset_top = 164.0
+offset_right = 648.0
+offset_bottom = -455.0
+alignment = 1
+metadata/_edit_group_ = true
 
-[node name="BackupControlsBtn" type="Button" parent="VBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="ButtonsHBox"]
 layout_mode = 2
-text = "Backup Controls"
+size_flags_horizontal = 3
+metadata/_edit_group_ = true
 
-[node name="TestBtn" type="Button" parent="VBoxContainer"]
+[node name="ConvertBtn" type="Button" parent="ButtonsHBox/VBoxContainer3"]
 layout_mode = 2
-text = "Test"
-
-[node name="DelShadersBtn" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-text = "Delete Shadercache"
-
-[node name="DelUserBtn" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-text = "Delete User Folder"
-
-[node name="ConvertBtn" type="Button" parent="VBoxContainer"]
-layout_mode = 2
+size_flags_vertical = 3
 text = "Convert Install"
 
-[node name="ResetBtn" type="Button" parent="VBoxContainer"]
+[node name="DelShadersBtn" type="Button" parent="ButtonsHBox/VBoxContainer3"]
 layout_mode = 2
-text = "Reset SCCP"
+size_flags_vertical = 3
+text = "Delete Shadercache"
+
+[node name="DelUserBtn" type="Button" parent="ButtonsHBox/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Delete User Folder"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ButtonsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="CCUGameBtn" type="Button" parent="ButtonsHBox/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "CCU Game"
+
+[node name="RSIWebsiteBtn" type="Button" parent="ButtonsHBox/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "RSI Website"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="ButtonsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TheImpoundBtn" type="Button" parent="ButtonsHBox/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "TheImpound"
+
+[node name="StarHangerBtn" type="Button" parent="ButtonsHBox/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Star Hanger"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="."]
+layout_mode = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 49.0
+offset_top = -406.0
+offset_right = 349.0
+offset_bottom = -71.0
+alignment = 2
+metadata/_edit_group_ = true
+
+[node name="GravekeepersLogo" type="TextureRect" parent="VBoxContainer3"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+texture = ExtResource("4_o35ih")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="CoffeeBtn" type="Button" parent="VBoxContainer3"]
+layout_mode = 2
+text = "Buy me a coffee!"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -593.0
+offset_left = 687.0
 offset_top = 50.0
 offset_right = -20.0
 offset_bottom = -21.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
@@ -117,6 +181,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="GameLbl" type="Label" parent="VBoxContainer2/GamePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Game"
+label_settings = SubResource("LabelSettings_xombh")
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer2"]
 custom_minimum_size = Vector2(0, 15)
@@ -133,6 +216,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BackupLbl" type="Label" parent="VBoxContainer2/BackupPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Backup"
+label_settings = SubResource("LabelSettings_3smfc")
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 1
 
 [node name="PopupPanel" type="PopupPanel" parent="."]
 title = "test"
@@ -165,11 +261,36 @@ size_flags_vertical = 3
 [node name="ButtonHBox" type="HBoxContainer" parent="PopupPanel/VBoxContainer"]
 layout_mode = 2
 
+[node name="ResetBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 94.0
+grow_vertical = 0
+text = "Reset Config"
+
+[node name="TitleLbl" type="Label" parent="."]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 667.0
+offset_bottom = 155.0
+text = "Star Citizen Control Panel"
+label_settings = SubResource("LabelSettings_i1651")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="MenuBar/BackupControlsBtn" to="." method="_on_backup_controls_btn_pressed"]
 [connection signal="pressed" from="MenuBar/RefreshBtn" to="." method="_on_refresh_btn_pressed"]
 [connection signal="item_selected" from="MenuBar/GameSelector" to="." method="_on_game_selector_item_selected"]
-[connection signal="pressed" from="VBoxContainer/BackupControlsBtn" to="." method="_on_backup_controls_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/TestBtn" to="." method="_on_test_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/DelShadersBtn" to="." method="_on_del_shaders_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/DelUserBtn" to="." method="_on_del_user_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/ConvertBtn" to="." method="_on_convert_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/ResetBtn" to="." method="_on_reset_btn_pressed"]
+[connection signal="pressed" from="ButtonsHBox/VBoxContainer3/ConvertBtn" to="." method="_on_convert_btn_pressed"]
+[connection signal="pressed" from="ButtonsHBox/VBoxContainer3/DelShadersBtn" to="." method="_on_del_shaders_btn_pressed"]
+[connection signal="pressed" from="ButtonsHBox/VBoxContainer3/DelUserBtn" to="." method="_on_del_user_btn_pressed"]
+[connection signal="pressed" from="ButtonsHBox/VBoxContainer/CCUGameBtn" to="." method="_on_ccu_game_btn_pressed"]
+[connection signal="pressed" from="ButtonsHBox/VBoxContainer/RSIWebsiteBtn" to="." method="_on_rsi_website_btn_pressed"]
+[connection signal="pressed" from="ButtonsHBox/VBoxContainer2/TheImpoundBtn" to="." method="_on_the_impound_btn_pressed"]
+[connection signal="pressed" from="ButtonsHBox/VBoxContainer2/StarHangerBtn" to="." method="_on_star_hanger_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer3/CoffeeBtn" to="." method="_on_coffee_btn_pressed"]
+[connection signal="pressed" from="ResetBtn" to="." method="_on_reset_btn_pressed"]

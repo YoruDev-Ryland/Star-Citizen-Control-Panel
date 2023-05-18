@@ -1,9 +1,9 @@
 Button
-Timer
-HBoxContainer
-Control
-Label
 VBoxContainer
+HBoxContainer
+Label
+Timer
+Control
 Popup
 PopupPanel
 HSeparator

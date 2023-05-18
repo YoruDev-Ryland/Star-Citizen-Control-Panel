@@ -18,6 +18,7 @@ func _process(_delta):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	DisplayServer.window_set_min_size(Vector2(1280, 720))
 	# Get configuration from file
 	if FileAccess.file_exists(Globals.config_path):
 		var file = FileAccess.open(Globals.config_path, FileAccess.READ)
@@ -46,12 +47,10 @@ func _ready():
 	# If backup directory in appdata doesn't exist, create it.
 	if !DirAccess.dir_exists_absolute(Globals.controlsBackupDirectory):
 		DirAccess.make_dir_recursive_absolute(Globals.controlsBackupDirectory)
-	
-
 
 
 # ------------------------------------------------------------------------------------------------#
-# Begin Shadercache Deletion Section DONE DONE (Comments)
+# Begin Shadercache Deletion Section DONE DONE
 # ------------------------------------------------------------------------------------------------#
 func _on_del_shaders_btn_pressed():
 	_update_Globals()
@@ -89,7 +88,7 @@ func _confirm_shadercache_delete_button_pressed():
 
 
 # ------------------------------------------------------------------------------------------------#
-# Begin User Folder Deletion Section DONE DONE (Comments)
+# Begin User Folder Deletion Section DONE DONE
 # ------------------------------------------------------------------------------------------------#
 func _on_del_user_btn_pressed():
 	_update_Globals()
@@ -173,7 +172,7 @@ func _confirm_user_delete_button_pressed(properties):
 
 
 # ------------------------------------------------------------------------------------------------#
-# Begin Convert Install Section DONE DONE (Comments)
+# Begin Convert Install Section DONE DONE
 # ------------------------------------------------------------------------------------------------#
 func _on_convert_btn_pressed():
 	_update_Globals()
@@ -299,7 +298,7 @@ func _confirm_convert_install_button_pressed(properties):
 
 
 # ------------------------------------------------------------------------------------------------#
-# Begin SCCP Reset Section DONE DONE (Comments)
+# Begin SCCP Reset Section DONE DONE
 # ------------------------------------------------------------------------------------------------#
 func _on_reset_btn_pressed():
 	_update_Globals()
@@ -337,7 +336,7 @@ func _confirm_config_delete_button_pressed():
 
 
 # ------------------------------------------------------------------------------------------------#
-# Begin Control Button Section DONE 
+# Begin Control Button Section DONE DONE
 # ------------------------------------------------------------------------------------------------#
 # Get popup for when control button is pressed (Cannot convert to function buttons)
 func _control_button_pressed(button_text: String, location: String):
@@ -406,19 +405,9 @@ func _control_function_button_pressed(button_text: String, controlProfileClicked
 							pass
 						else:
 							spawnButton($MenuBar/GameSelector.get_item_text(i), "_copy_button_pressed", {"location": location, "buttonText": $MenuBar/GameSelector.get_item_text(i), "controlProfileClicked": controlProfileClicked})
-							var button = Button.new()
-							button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-							button.text = $MenuBar/GameSelector.get_item_text(i)
-							button.connect("pressed", func(): _copy_button_pressed(location, button.text, controlProfileClicked))
-							hbox.add_child(button)
 					
 					# Create the Cancel Button
 					spawnButton("Cancel", "_cancel_button_pressed", {})
-					var button = Button.new()
-					button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-					button.text = "Cancel"
-					button.connect("pressed", func(): _cancel_button_pressed())
-					hbox.add_child(button)
 					popup.popup_centered()
 					
 				"Backup": # The control button clicked was in the backup(bottom) controlbox
@@ -428,17 +417,10 @@ func _control_function_button_pressed(button_text: String, controlProfileClicked
 					topLabel.text = ""
 					
 					for i in range($MenuBar/GameSelector.get_item_count()): # List all options since you are in the backup controlbox
-						var button = Button.new()
-						button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-						button.text = $MenuBar/GameSelector.get_item_text(i)
-						button.connect("pressed", func(): _copy_button_pressed(location, button.text, controlProfileClicked))
-						hbox.add_child(button)
+						spawnButton($MenuBar/GameSelector.get_item_text(i), "_copy_button_pressed", {"location": location, "buttonText": $MenuBar/GameSelector.get_item_text(i), "controlProfileClicked": controlProfileClicked})
+					
 					# Create the Cancel Button
-					var button = Button.new()
-					button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-					button.text = "Cancel"#
-					button.connect("pressed", func(): _cancel_button_pressed())
-					hbox.add_child(button)
+					spawnButton("Cancel", "_cancel_button_pressed", {})
 					popup.popup_centered()
 			
 			# If file exists, warn
@@ -448,7 +430,9 @@ func _control_function_button_pressed(button_text: String, controlProfileClicked
 			# If backup exists, warn
 			# Save file to backup directory
 			titleLabel.text = "Backing up Controls"
-			backup_Controls(Globals.selectedVersion)
+			
+			copy_files(Globals.gameDirectory+Globals.selectedVersion+"/"+Globals.controlsDirectory+controlProfileClicked, Globals.controlsBackupDirectory)
+			
 			titleLabel.text = "Backup Complete"
 			topLabel.text = controlProfileClicked + " has been backed up."
 			
@@ -458,35 +442,67 @@ func _control_function_button_pressed(button_text: String, controlProfileClicked
 			
 			popup.popup_centered()
 		"Delete":
-			print("Delete")
+			titleLabel.text = "Delete " + controlProfileClicked + "?"
 			
-			# Warn about deleting the file
-			# Delete the file
+			topLabel.text = "This will delete this controller profile, are you sure?"
+			
+			_clear_element(hbox)
+			
+			spawnButton("Yes, delete.", "_confirm_delete_button_pressed", {"controlProfileClicked": controlProfileClicked, "location": location})
+			spawnButton("Cancel", "_cancel_button_pressed", {})
+			
+			popup.popup_centered()
 		"Cancel":
 			_cancel_button_pressed()
 
+func _confirm_delete_button_pressed(properties):
+	match properties["location"]:
+		"Game":
+			delete_files(Globals.gameDirectory+Globals.selectedVersion+"/"+Globals.controlsDirectory+properties["controlProfileClicked"])
+	
+			update_Control_Boxes(Globals.selectedVersion)
+			
+			titleLabel.text = properties["controlProfileClicked"] + " has been deleted."
+			topLabel.text = ""
+			
+			_clear_element(hbox)
+			
+			spawnButton("Ok", "_cancel_button_pressed", {})
+			popup.popup_centered()
+		"Backup":
+			delete_files(Globals.controlsBackupDirectory+properties["controlProfileClicked"])
+	
+			update_Control_Boxes(Globals.selectedVersion)
+			
+			titleLabel.text = properties["controlProfileClicked"] + " has been deleted."
+			topLabel.text = ""
+			
+			_clear_element(hbox)
+			
+			spawnButton("Ok", "_cancel_button_pressed", {})
+			popup.popup_centered()
 
 # ------------------------------------------------------------------------------------------------#
-# Begin Control Copy Section
+# Begin Control Copy Section DONE
 # ------------------------------------------------------------------------------------------------#
-func _copy_button_pressed(location, button_text: String, controlfilename: String):
-	match location:
+func _copy_button_pressed(properties):
+	match properties["location"]:
 		"Game":
-			match button_text:
+			match properties["buttonText"]:
 				"LIVE":
-					_copyFiles(Globals.gameDirectory + Globals.selectedVersion + "/", Globals.controlsDirectory, Globals.liveDirectory + Globals.controlsDirectory, controlfilename)
+					_copyFiles(Globals.gameDirectory + Globals.selectedVersion + "/", Globals.controlsDirectory, Globals.liveDirectory + Globals.controlsDirectory, properties["controlProfileClicked"])
 				"PTU":
-					_copyFiles(Globals.gameDirectory + Globals.selectedVersion + "/", Globals.controlsDirectory, Globals.ptuDirectory + Globals.controlsDirectory, controlfilename)
+					_copyFiles(Globals.gameDirectory + Globals.selectedVersion + "/", Globals.controlsDirectory, Globals.ptuDirectory + Globals.controlsDirectory, properties["controlProfileClicked"])
 				"EPTU":
-					_copyFiles(Globals.gameDirectory + Globals.selectedVersion + "/", Globals.controlsDirectory, Globals.eptuDirectory + Globals.controlsDirectory, controlfilename)
+					_copyFiles(Globals.gameDirectory + Globals.selectedVersion + "/", Globals.controlsDirectory, Globals.eptuDirectory + Globals.controlsDirectory, properties["controlProfileClicked"])
 		"Backup":
-			match button_text:
+			match properties["buttonText"]:
 				"LIVE":
-					_copyFiles(Globals.controlsBackupDirectory, "", Globals.liveDirectory + Globals.controlsDirectory, controlfilename)
+					_copyFiles(Globals.controlsBackupDirectory, "", Globals.liveDirectory + Globals.controlsDirectory, properties["controlProfileClicked"])
 				"PTU":
-					_copyFiles(Globals.controlsBackupDirectory, "", Globals.ptuDirectory + Globals.controlsDirectory, controlfilename)
+					_copyFiles(Globals.controlsBackupDirectory, "", Globals.ptuDirectory + Globals.controlsDirectory, properties["controlProfileClicked"])
 				"EPTU":
-					_copyFiles(Globals.controlsBackupDirectory, "", Globals.eptuDirectory + Globals.controlsDirectory, controlfilename)
+					_copyFiles(Globals.controlsBackupDirectory, "", Globals.eptuDirectory + Globals.controlsDirectory, properties["controlProfileClicked"])
 
 
 func _copyFiles(sourceDir: String, sourceSubDir: String, destinationDir: String, selectedControlFile: String):
@@ -495,17 +511,10 @@ func _copyFiles(sourceDir: String, sourceSubDir: String, destinationDir: String,
 	if FileAccess.file_exists(destinationPathAndFile):
 		topLabel.text = "file exists, would you like to overwrite?:\n" + selectedControlFile # Warn and ask for approval later
 		_clear_element(hbox)
-		var button = Button.new()
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.text = "Yes"
-		button.connect("pressed", func(): _confirm_copy_overwrite_button_pressed(sourcePathAndFile, destinationDir, selectedControlFile))
-		hbox.add_child(button)
+		spawnButton("Yes", "_confirm_copy_overwrite_button_pressed", {"sourcePathAndFile": sourcePathAndFile, "destinationDir": destinationDir, "selectedControlFile": selectedControlFile})
+		
 		# Create the Cancel Button
-		button = Button.new()
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.text = "Cancel"
-		button.connect("pressed", func(): _cancel_button_pressed())
-		hbox.add_child(button)
+		spawnButton("Cancel", "_cancel_button_pressed", {})
 		popup.popup_centered()
 	else:
 		if !DirAccess.dir_exists_absolute(destinationDir):
@@ -517,57 +526,43 @@ func _copyFiles(sourceDir: String, sourceSubDir: String, destinationDir: String,
 		
 		_clear_element(hbox)
 		
-		var button = Button.new()
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.text = "Ok"
-		button.connect("pressed", func(): _cancel_button_pressed())
-		hbox.add_child(button)
+		spawnButton("Ok", "_cancel_button_pressed", {})
 		popup.popup_centered()
 
 
-func _confirm_copy_overwrite_button_pressed(sourcePathAndFile: String, destinationDir: String, selectedControlFile: String):
-	if !DirAccess.dir_exists_absolute(destinationDir):
-		DirAccess.make_dir_recursive_absolute(destinationDir)
+func _confirm_copy_overwrite_button_pressed(properties):
+	if !DirAccess.dir_exists_absolute(properties["destinationDir"]):
+		DirAccess.make_dir_recursive_absolute(properties["destinationDir"])
 		
-	copy_files(sourcePathAndFile, destinationDir)
+	copy_files(properties["sourcePathAndFile"], properties["destinationDir"])
 		
-	topLabel.text = "Copied: " + selectedControlFile
+	topLabel.text = "Copied: " + properties["selectedControlFile"]
 	
 	_clear_element(hbox)
 	
-	var button = Button.new()
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.text = "Ok"
-	button.connect("pressed", func(): _cancel_button_pressed())
-	hbox.add_child(button)
+	spawnButton("Ok", "_cancel_button_pressed", {})
 	popup.popup_centered()
 
 
 # ------------------------------------------------------------------------------------------------#
-# Begin Control Backup Section
+# Begin Control Backup Section DONE
 # ------------------------------------------------------------------------------------------------#
 func _on_backup_controls_btn_pressed():
-	_update_Selected_Game_Version() # Update to make sure latest version is selected
-	backup_Controls("LIVE") # Backup selected versions controls to the backup file.
+	backup_Controls() # Backup selected versions controls to the backup file.
 
 
-func backup_Controls(fromVersion: String):
+func backup_Controls():
 	_update_Globals()
 	
-	match fromVersion:
-		"LIVE":
-			backup_files(Globals.liveDirectory+Globals.controlsDirectory, Globals.controlsBackupDirectory)
-		"PTU":
-			backup_files(Globals.ptuDirectory+Globals.controlsDirectory, Globals.controlsBackupDirectory)
-		"EPTU":
-			backup_files(Globals.eptuDirectory+Globals.controlsDirectory, Globals.controlsBackupDirectory)
+	for i in range($MenuBar/GameSelector.get_item_count()): # List all options since you are in the backup controlbox
+		$MenuBar/GameSelector.get_item_text(i)
+		backup_files(Globals.gameDirectory+$MenuBar/GameSelector.get_item_text(i)+"/"+Globals.controlsDirectory, Globals.controlsBackupDirectory)
 	
 	update_Control_Boxes(Globals.selectedVersion)
 
 
-
 # ------------------------------------------------------------------------------------------------#
-# Begin Refresh Section
+# Begin Refresh Section DONE
 # ------------------------------------------------------------------------------------------------#
 func _on_refresh_btn_pressed():
 	update_Control_Boxes(Globals.selectedVersion)
@@ -689,9 +684,9 @@ func update_Control_Boxes(_activeversion: String):
 func copy_files(copyfrom: String, copyto: String):
 	if !DirAccess.dir_exists_absolute(copyto):
 			DirAccess.make_dir_recursive_absolute(copyto)
-	print("Copied from: " + copyfrom)
-	print("Copied to: " + copyto)
+	
 	OS.execute("powershell.exe", ["Copy-Item", "-Path", "'"+copyfrom+"'", "-Destination", "'"+copyto+"'"])
+	update_Control_Boxes(Globals.selectedVersion)
 
 
 func move_files(movefrom: String, moveto: String):
@@ -743,11 +738,25 @@ func create_button(buttonText: String, buttonFunction: Callable):
 	hbox.add_child(button)
 
 
-#-----------------------------------------------------------------------------#
-func _on_test_btn_pressed():
-	backup_files(Globals.ptuDirectory+Globals.controlsDirectory, Globals.controlsBackupDirectory+"Temp/")
+# ------------------------------------------------------------------------------------------------#
+# Begin External Links
+# ------------------------------------------------------------------------------------------------#
+func _on_coffee_btn_pressed():
+	OS.shell_open("https://www.buymeacoffee.com/gravekeepers")
 
-func testButton():
-	print("test")
 
+func _on_ccu_game_btn_pressed():
+	OS.shell_open("https://ccugame.app/")
+
+
+func _on_rsi_website_btn_pressed():
+	OS.shell_open("https://robertsspaceindustries.com/")
+
+
+func _on_the_impound_btn_pressed():
+	OS.shell_open("https://theimpound.com/")
+
+
+func _on_star_hanger_btn_pressed():
+	OS.shell_open("https://star-hangar.com/")
 

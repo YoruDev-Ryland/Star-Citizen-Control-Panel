@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://dv8la6hhklb8j"]
+[gd_scene load_steps=11 format=3 uid="uid://dv8la6hhklb8j"]
 
 [ext_resource type="Theme" uid="uid://k4oolnpql0cw" path="res://Main.tres" id="1_dvd8g"]
 [ext_resource type="Script" path="res://main.gd" id="1_f62fv"]
 [ext_resource type="Texture2D" uid="uid://71ltnevmrqsp" path="res://insideship.jpg" id="3_ikh6c"]
 [ext_resource type="Texture2D" uid="uid://co3i515gibx8h" path="res://ColorLogotrans.png" id="4_o35ih"]
+[ext_resource type="FontFile" uid="uid://d0w8m1ckbfndq" path="res://goodtimes.otf" id="5_fgwbq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xombh"]
 font_size = 140
@@ -20,7 +21,8 @@ font_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 font_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_i1651"]
-font_size = 50
+font = ExtResource("5_fgwbq")
+font_size = 32
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -273,9 +275,9 @@ text = "Reset Config"
 
 [node name="TitleLbl" type="Label" parent="."]
 layout_mode = 1
-offset_left = 20.0
+offset_left = 34.0
 offset_top = 20.0
-offset_right = 667.0
+offset_right = 649.0
 offset_bottom = 155.0
 text = "Star Citizen Control Panel"
 label_settings = SubResource("LabelSettings_i1651")

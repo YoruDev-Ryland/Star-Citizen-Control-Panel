@@ -15,7 +15,8 @@ run/main_scene="res://main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="StarCitizenControlPanel"
 config/features=PackedStringArray("4.0", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/show_image=false
+config/icon="res://ColorLogotrans.png"
 
 [autoload]
 

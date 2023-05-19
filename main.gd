@@ -548,17 +548,21 @@ func _confirm_copy_overwrite_button_pressed(properties):
 # Begin Control Backup Section DONE
 # ------------------------------------------------------------------------------------------------#
 func _on_backup_controls_btn_pressed():
-	backup_Controls() # Backup selected versions controls to the backup file.
-
-
-func backup_Controls():
 	_update_Globals()
-	
+	check_user_mappings()
 	for i in range($MenuBar/GameSelector.get_item_count()): # List all options since you are in the backup controlbox
 		$MenuBar/GameSelector.get_item_text(i)
 		backup_files(Globals.gameDirectory+$MenuBar/GameSelector.get_item_text(i)+"/"+Globals.controlsDirectory, Globals.controlsBackupDirectory)
 	
-	update_Control_Boxes(Globals.selectedVersion)
+	if check_user_mappings():
+		update_Control_Boxes(Globals.selectedVersion)
+		
+		titleLabel.text = "Controller Mappings Backed Up"
+		topLabel.text = "All of your controller mapping profiles from all detected installs have been backed up."
+		_clear_element(hbox)
+		
+		spawnButton("Ok", "_cancel_button_pressed", {})
+		popup.popup_centered()
 
 
 # ------------------------------------------------------------------------------------------------#
@@ -738,6 +742,32 @@ func create_button(buttonText: String, buttonFunction: Callable):
 	hbox.add_child(button)
 
 
+func check_user_mappings():
+	titleLabel.text = ""
+	var file_count = 0
+	for i in range($MenuBar/GameSelector.get_item_count()): # for each option
+		var dir = DirAccess.open(Globals.gameDirectory+$MenuBar/GameSelector.get_item_text(i)+"/"+Globals.controlsDirectory)
+		if dir:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while file_name != "":
+				if not dir.current_is_dir():
+					file_count += 1
+				file_name = dir.get_next()
+			dir.list_dir_end()
+	if (file_count == 0):
+		titleLabel.text = "No controller mappings found in game files"
+		topLabel.text = "Please make sure you save your controller profiles in order for SCCP to locate them.\nClick the info button to learn how to export your controls."
+		_clear_element(hbox)
+		
+		spawnButton("Ok", "_cancel_button_pressed", {})
+		popup.popup_centered()
+		
+		return false
+	else:
+		return true
+
+
 # ------------------------------------------------------------------------------------------------#
 # Begin External Links
 # ------------------------------------------------------------------------------------------------#
@@ -760,3 +790,6 @@ func _on_the_impound_btn_pressed():
 func _on_star_hanger_btn_pressed():
 	OS.shell_open("https://star-hangar.com/")
 
+
+func _on_exportlink_btn_pressed():
+	OS.shell_open("https://support.robertsspaceindustries.com/hc/en-us/articles/360000183328-Create-export-and-import-custom-profiles")

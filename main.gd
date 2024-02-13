@@ -305,7 +305,7 @@ func _on_reset_btn_pressed():
 	_clear_element(hbox)
 	
 	titleLabel.text = "Reset Star Citizen Control Panel"
-	topLabel.text = "This will delete your Star Citizen Control Panbel config, are you sure?" # Warn and ask for approval
+	topLabel.text = "This will delete your Star Citizen Control Panel config, are you sure?" # Warn and ask for approval
 	
 	spawnButton("Yes", "_confirm_config_delete_button_pressed", {})
 	

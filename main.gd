@@ -111,21 +111,21 @@ func _confirm_user_delete_button_pressed(properties):
 			if DirAccess.dir_exists_absolute(Globals.liveDirectory+"USER"):
 				backup_files(Globals.liveDirectory+Globals.controlsDirectory, Globals.controlsBackupDirectory+"Temp/")
 				
-				delete_files(Globals.liveDirectory)
+				delete_files(Globals.liveDirectory+"USER")
 				
-				backup_files(Globals.controlsBackupDirectory+"Temp/", Globals.liveDirectory+Globals.controlsDirectory)
+				#backup_files(Globals.controlsBackupDirectory+"Temp/", Globals.liveDirectory+Globals.controlsDirectory)
 				
 				topLabel.text = "The " + properties["version"] + " user folder has been deleted."
 				
 				_clear_element(hbox)
-				spawnButton("Cancel", "_cancel_button_pressed", {})
+				spawnButton("Ok", "_cancel_button_pressed", {})
 				popup.popup_centered()
 			else:
 				topLabel.text = "The " + properties["version"] + " user folder could not be found or has already been deleted."
 				
 				_clear_element(hbox)
 				
-				spawnButton("Cancel", "_cancel_button_pressed", {})
+				spawnButton("Ok", "_cancel_button_pressed", {})
 				popup.popup_centered()
 		"PTU":
 			if DirAccess.dir_exists_absolute(Globals.ptuDirectory+"USER"):
@@ -139,14 +139,14 @@ func _confirm_user_delete_button_pressed(properties):
 				
 				_clear_element(hbox)
 				
-				spawnButton("Cancel", "_cancel_button_pressed", {})
+				spawnButton("Ok", "_cancel_button_pressed", {})
 				popup.popup_centered()
 			else:
 				topLabel.text = "The " + properties["version"] + " user folder could not be found or has already been deleted."
 				
 				_clear_element(hbox)
 				
-				spawnButton("Cancel", "_cancel_button_pressed", {})
+				spawnButton("Ok", "_cancel_button_pressed", {})
 				popup.popup_centered()
 		"EPTU":
 			if DirAccess.dir_exists_absolute(Globals.eptuDirectory+"USER"):
@@ -160,14 +160,14 @@ func _confirm_user_delete_button_pressed(properties):
 				
 				_clear_element(hbox)
 				
-				spawnButton("Cancel", "_cancel_button_pressed", {})
+				spawnButton("Ok", "_cancel_button_pressed", {})
 				popup.popup_centered()
 			else:
 				topLabel.text = "The " + properties["version"] + " user folder could not be found or has already been deleted."
 				
 				_clear_element(hbox)
 				
-				spawnButton("Cancel", "_cancel_button_pressed", {})
+				spawnButton("Ok", "_cancel_button_pressed", {})
 				popup.popup_centered()
 
 

@@ -14,7 +14,7 @@ config/name="Star Citizen Control Panel"
 run/main_scene="res://main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="StarCitizenControlPanel"
-config/features=PackedStringArray("4.1", "Forward Plus")
+config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/image="res://ColorLogotrans.png"
 config/icon="res://ColorLogotrans.png"
 
